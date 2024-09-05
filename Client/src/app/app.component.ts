@@ -1,3 +1,4 @@
+import { NgFor } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
@@ -14,10 +15,10 @@ export class AppComponent implements OnInit {
   title = 'DatingApp';
   users: any;
   ngOnInit(): void {
-    const users = this.http.get("https://localhost/api/users").subscribe({
+    const users = this.http.get("https://localhost:5001/api/users").subscribe({
       next: res => this.users = res,
       error: error => console.log(error),
-      complete: () => console.log("Request complete"),      
+      complete: () => console.log("Request complete", users),      
     });
     
   }
