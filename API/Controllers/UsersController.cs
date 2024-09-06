@@ -1,13 +1,13 @@
 ﻿using API.Data;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class UsersController(DataContext context) : ControllerBase
+[Authorize]
+public class UsersController(DataContext context) : ApiBaseController
 {
     
     [HttpGet]
@@ -15,7 +15,8 @@ public class UsersController(DataContext context) : ControllerBase
     {
         var users = await context.Users.ToListAsync();
         if (users.Count == 0) return NotFound();
-        return Ok(users);
+        var response = users.Select(u => new { u.UserName, u.Id });
+        return Ok(response);
     }
 
     [HttpGet("{id:int}")]
@@ -28,11 +29,5 @@ public class UsersController(DataContext context) : ControllerBase
         return Ok(user);
     }
 
-    [HttpPost("add")]
-    public async Task<ActionResult> AddUser([FromBody] AppUser user)
-    {
-        await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
-        return Ok("user created");
-    }
+    
 }
