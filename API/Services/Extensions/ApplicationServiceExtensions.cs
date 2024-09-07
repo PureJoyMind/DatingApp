@@ -2,7 +2,7 @@
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Services;
+namespace API.Services.Extensions;
 
 public static class ApplicationServiceExtensions
 {

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
-[Authorize]
 public class UsersController(DataContext context) : ApiBaseController
 {
     
@@ -19,6 +18,7 @@ public class UsersController(DataContext context) : ApiBaseController
         return Ok(response);
     }
 
+    [Authorize]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<AppUser>> GetUser(int id)
     {
