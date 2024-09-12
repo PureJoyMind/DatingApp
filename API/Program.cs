@@ -1,5 +1,8 @@
+using API.Data;
 using API.Middleware;
 using API.Services.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,4 +25,19 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Service locator pattern
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(context);
+}
+catch (Exception e)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(e, "An error occured during migration");
+    throw;
+}
 app.Run();
