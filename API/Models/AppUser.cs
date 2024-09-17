@@ -1,8 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using API.Services.Extensions;
-using Microsoft.EntityFrameworkCore.Sqlite.Query.Internal;
-
-namespace API.Models;
+﻿namespace API.Models;
 
 public class AppUser
 {

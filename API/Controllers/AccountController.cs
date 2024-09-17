@@ -2,7 +2,6 @@
 using System.Text;
 using API.Data;
 using API.Interfaces;
-using API.Models;
 using API.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,7 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     {
         if (await UserExists(request.Username)) return BadRequest("User already exists");
 
-        return Ok();
+        return Ok(); 
 
         // using var hmac = new HMACSHA512();
         // var salt = hmac.Key;
@@ -37,7 +36,10 @@ public class AccountController(DataContext context, ITokenService tokenService) 
     [HttpPost("login")]
     public async Task<ActionResult<UserDto>> Login(LoginDto request)
     {
-        var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == request.Username.ToLower());
+        var user = await context.Users
+            .Include(appUser => appUser.Photos)
+            .FirstOrDefaultAsync(u => 
+                u.UserName == request.Username.ToLower());
         if (user == null) return Unauthorized("Invalid Username");
 
         using var hmac = new HMACSHA512(user.PasswordSalt);
@@ -48,7 +50,13 @@ public class AccountController(DataContext context, ITokenService tokenService) 
             if (encryptedPass[i] != user.PasswordHash[i]) return Unauthorized("Invalid Password");
         }
 
-        return new UserDto{Username = user.UserName, Token = tokenService.CreateToken(user)};
+        var photoUrl = user.Photos.FirstOrDefault(x => x.IsMain)?.Url;
+        return new UserDto
+        {
+            Username = user.UserName,
+            Token = tokenService.CreateToken(user),
+            PhotoUrl = photoUrl
+        };
     }
     
     private async Task<bool> UserExists(string username) =>

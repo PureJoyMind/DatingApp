@@ -1,6 +1,4 @@
-﻿using API.Services.Extensions;
-
-namespace API.Models.DTOs;
+﻿namespace API.Models.DTOs;
 
 public class MemberDto
 {

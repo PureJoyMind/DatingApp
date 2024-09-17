@@ -1,5 +1,4 @@
-﻿using API.Data;
-using API.Models;
+﻿using API.Models;
 using API.Models.DTOs;
 
 namespace API.Interfaces;
