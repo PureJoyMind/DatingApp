@@ -1,29 +1,47 @@
-<form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+<form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
     <h2 class="text-center text-primary">Sign Up!</h2>
     <hr>
-    <div class="mb-3 form-floating">
-        <input 
-            [(ngModel)]="model.username"
-            placeholder="username"
-            type="text" 
-            name="username" 
-            class="form-control">
-        <label>Username</label>
+
+    <div class="mb-3">
+        <label style="margin-right: 10px;">I am a:</label>
+        <label  class="form-check-label me-3">
+            <input type="radio" class="form-check-input" value="male" formControlName="gender"> Male
+        </label>
+        <label  class="form-check-label">
+            <input type="radio" class="form-check-input" value="femmale" formControlName="gender"> Female
+        </label>
     </div>
 
-    
+    <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'Username'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['knownAs'])" [label]="'Known as'"></app-text-input>
 
-    <div class="mb-3 form-floating">
-        <input 
-            [(ngModel)]="model.password"
-            placeholder="Password"
-            type="password" 
-            name="password" 
-            class="form-control">
-        <label>Password</label>
-    </div>
+    <app-date-picker [formControl]="$any(registerForm.controls['dateOfBirth'])" [label]="'Date of birth'" [maxDate]="maxDate">
+    </app-date-picker>
+
+    <app-text-input [formControl]="$any(registerForm.controls['city'])" [label]="'City'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['country'])" [label]="'Country'"></app-text-input>
+
+    <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'"
+        [type]="'password'"></app-text-input>
+
+    <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Confirm Password'"
+        [type]="'password'" [customValidators]="[{name: 'isMatching', message: 'The passwords don\'t match'}]"></app-text-input>
+
+
+    @if(validationErrors){
+        <div class="alert alert-danger text-start">
+            <ul>
+                @for (error of validationErrors; track $index) {
+                    <li>
+                        {{error}}
+                    </li> 
+                }
+            </ul>
+        </div>
+    }
+
     <div class="form-group text-center">
-        <button type="submit" class="btn btn-success me-2">Register</button>
-        <button type="button" class="btn btn-default me-2" (click)="cancel()">Cancel</button>
+        <button type="submit" class="btn btn-success me-2" [disabled]="!registerForm.valid" >Register</button>
+        <button type="button" class="btn btn-danger me-2" (click)="cancel()">Cancel</button>
     </div>
 </form>

@@ -1,0 +1,26 @@
+<div class="mb-3 form-floating">
+    <input [class.is-invalid]="control.touched && control.invalid" class="form-control" placeholder="{{label()}}"
+        [type]="type()" [formControl]="control">
+
+    <label>{{label()}}</label>
+
+    <div *ngIf="control.hasError('required')" class="invalid-feedback text-start">
+        Enter a {{label()}}</div>
+
+    <div *ngIf="control.hasError('minlength')" class="invalid-feedback text-start">
+        {{label()}} must be atleast {{control.errors?.['minlength'].requiredLength}} characters</div>
+
+    <div *ngIf="control.hasError('maxlength')" class="invalid-feedback text-start">
+        {{label()}} must be most {{control.errors?.['maxlength'].requiredLength}} characters</div>
+
+    <!-- 
+        The ngFor directive wan't working for this particular instance of usage, I don't know how nor do I care.
+        This worked and I just switched to this to see what happens. I have no idea how this worked 
+    -->
+    @for (validator of customValidators(); track $index) {
+    <div *ngIf="control.hasError(validator.name)" class="invalid-feedback text-start">
+        {{validator.message}}</div>
+
+    }
+
+</div>

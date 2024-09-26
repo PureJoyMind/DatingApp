@@ -18,7 +18,7 @@
 
         @if (accountService.currentUser()) {
             <div class="dropdown" dropdown>
-                <img src="{{accountService.currentUser()?.photoUrl || '/assets/user.png'}}" 
+                <img src="{{accountService.currentUser()?.photoUrl || 'assets/user.png'}}" 
                 alt="user main image">
                 <a class="dropdown-toggle text-light text-decoration-none" dropdownToggle>
                     Welcome {{accountService.currentUser()?.username | titlecase}}
@@ -37,7 +37,7 @@
                 <input name="username" [(ngModel)]="model.username" class="form-control me-2" placeholder="Username">
                 <input name="password" [(ngModel)]="model.password" class="form-control me-2" placeholder="Password"
                     type="password">
-                <button class="btn btn-info btn-outline-danger" type="submit">Login</button>
+                <button class="btn btn-secondary" type="submit">Login</button>
             </form>
         }
 
