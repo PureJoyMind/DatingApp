@@ -1,4 +1,5 @@
-﻿using API.Interfaces;
+﻿using API.Helpers;
+using API.Interfaces;
 using API.Models;
 using API.Models.DTOs;
 using API.Services.Extensions;
@@ -14,9 +15,13 @@ public class UsersController(IUserRepository userRepository,
 {
     
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
     {
-        var users = await userRepository.GetMembersAsync();
+        userParams.CurrentUsername = User.GetUsername();
+        
+        var users = await userRepository.GetMembersAsync(userParams);
+        
+        Response.AddPaginationHeader(users);
         
         return Ok(users);
     }
