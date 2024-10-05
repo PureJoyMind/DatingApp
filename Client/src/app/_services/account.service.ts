@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { map } from 'rxjs';
 import { JsonPipe } from '@angular/common';
 import { environment } from '../../environments/environment';
+import { LikesService } from './likes.service';
  
 @Injectable({ // These are Singletons
   providedIn: 'root'
@@ -12,6 +13,8 @@ export class AccountService {
   private http = inject(HttpClient);
   baseUrl = environment.apiUrl;
   currentUser = signal<User | null>(null)
+  private likeService = inject(LikesService)
+
   login(model : any){
     return this.http.post<User>(this.baseUrl + "account/login", model).pipe(
       map(user => {
@@ -36,7 +39,7 @@ export class AccountService {
   setCurrentUser(user: User){
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.set(user);
-    console.log(JSON.stringify(user));
+    this.likeService.getLikeIds();
   }
 
   logout(){

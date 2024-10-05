@@ -20,6 +20,7 @@ public static class ApplicationServiceExtensions
         services.AddCors();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ILikesRepository, LikesRepository>();
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<LogUserActiviy>();
         // automapper scans the project and looks for types derived from Profile

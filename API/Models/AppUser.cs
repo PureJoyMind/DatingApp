@@ -1,4 +1,6 @@
-﻿namespace API.Models;
+﻿using System.Runtime.CompilerServices;
+
+namespace API.Models;
 
 public class AppUser
 {
@@ -17,4 +19,6 @@ public class AppUser
     public required string City { get; set; }
     public required string Country { get; set; }
     public List<Photo> Photos { get; set; } = new List<Photo>();
+    public List<UserLike> LikedByUsers { get; set; }
+    public List<UserLike> LikedUsers { get; set; }
 }
